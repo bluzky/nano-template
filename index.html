@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="rendered-content">
+    </div>
+
+    <script type="text/template" id="sample">
+      {%
+
+      %}
+        <table>
+            <tr>
+              <th>Name</th>
+              <td>{{ test["name"] }}</td>
+            </tr>
+            <tr>
+              <th>Rank</th>
+              <td>{{ test["rank"] }}</td>
+            </tr>
+            <tr>
+              <th>Type</th>
+              <td>
+                {% if (test["type"] == "range") do %}
+                  <b>R</b>
+                {% else %}
+                  <i>Unknown</i>
+                {% end %}
+              </td>
+            </tr>
+            <tr>
+              <th>Item</th>
+              <td>
+                {% for(var i = 0; i < test["items"].length; i++) do %}
+                <label> {{ test["items"][i] }}</label>
+                {% end %}
+              </td>
+            </tr>
+        </table>
+    </script>
+    <script src="nano.template.js" charset="utf-8"></script>
+    <script src="demo.js" charset="utf-8"></script>
+</body>
+</html>
