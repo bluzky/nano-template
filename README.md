@@ -47,5 +47,5 @@ A lightweight and pure javascript template engine
 
   **Output**
   ```html
-  <b>ODD</b>
+  <b>EVEN</b>
   ```
