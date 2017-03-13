@@ -7,6 +7,6 @@ var test = {
 };
 
 var html = document.getElementById("sample").innerHTML;
-var tpl = new NanoTemplate(html);
+var tpl = new nano.Template(html);
 var container = document.getElementById("rendered-content");
 container.innerHTML = tpl.render({test: test});
