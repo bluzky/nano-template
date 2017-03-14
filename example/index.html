@@ -1,49 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    pre {
+      font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+      margin-bottom: 10px;
+      overflow: auto;
+      width: auto;
+      padding: 5px;
+      background-color: #eee;
+      width: 650px!ie7;
+      padding-bottom: 20px!ie7;
+      max-height: 600px;
+    }
+
+    section{
+      max-width: 960px;
+      margin: auto;
+      margin-bottom: 50px;
+    }
+
+    h3{
+      text-transform: uppercase;
+      color: #666;
+    }
+  </style>
+
+
 </head>
+
 <body>
-    <div id="rendered-content">
-    </div>
+<section>
+  <h3> Template </h3>
+  <blockquote>
+    <pre><code>
+&lt;table&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Name&lt;/th&gt;
+      &lt;td&gt;{{ test[&quot;name&quot;] }}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Rank&lt;/th&gt;
+      &lt;td&gt;{{ test[&quot;rank&quot;] }}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Type&lt;/th&gt;
+      &lt;td&gt;
+        {% if (test[&quot;type&quot;] == &quot;range&quot;) do %}
+          &lt;b&gt;R&lt;/b&gt;
+        {% else %}
+          &lt;i&gt;Unknown&lt;/i&gt;
+        {% end %}
+      &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Item&lt;/th&gt;
+      &lt;td&gt;
+        {% for(var i = 0; i &lt; test[&quot;items&quot;].length; i++) do %}
+        &lt;label&gt; {{ test[&quot;items&quot;][i] }}&lt;/label&gt;
+        {% end %}
+      &lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+  </blockquote>
 
-    <script type="text/template" id="sample">
-      {%
+  <h3>Javascript</h3>
+  <blockquote>
+    <pre><code>
+var test = {
+  name: "Dzung",
+  type: "ranger",
+  age: 90,
+  rank: "super man",
+  items: ["axe", "bow", "sword", "diamon helmet", "wind shoes"]
+};
 
-      %}
-        <table>
-            <tr>
-              <th>Name</th>
-              <td>{{ test["name"] }}</td>
-            </tr>
-            <tr>
-              <th>Rank</th>
-              <td>{{ test["rank"] }}</td>
-            </tr>
-            <tr>
-              <th>Type</th>
-              <td>
-                {% if (test["type"] == "range") do %}
-                  <b>R</b>
-                {% else %}
-                  <i>Unknown</i>
-                {% end %}
-              </td>
-            </tr>
-            <tr>
-              <th>Item</th>
-              <td>
-                {% for(var i = 0; i < test["items"].length; i++) do %}
-                <label> {{ test["items"][i] }}</label>
-                {% end %}
-              </td>
-            </tr>
-        </table>
-    </script>
-    <script src="../nano.js" charset="utf-8"></script>
-    <script src="demo.js" charset="utf-8"></script>
+var html = document.getElementById("sample").innerHTML;
+var tpl = new nano.Template(html);
+var container = document.getElementById("rendered-content");
+container.innerHTML = tpl.render({test: test});
+    </code></pre>
+</blockquote>
+  <h3>Output</h3>
+  <div id="rendered-content">
+  </div>
+</section>
+
+<section>
+  <h3>Template</h3>
+  <blockquote>
+    <pre><code>
+&lt;ul&gt;
+  {% ctx.$.each(data, function(item)do %}
+    &lt;li&gt;{{item}}&lt;/li&gt;
+  {% end) %}
+&lt;ul&gt;</code></pre>
+  </blockquote>
+
+  <h3>Javascript</h3>
+  <blockquote>
+    <pre><code>
+var context = {$: jQuery};
+var data = ['this', 'is', 'an', 'array'];
+var templateStr = document.getElementById("list-template").innerHTML;
+var template = nano.compile(templateStr);
+document.getElementById("rendered-list").innerHTML = template.render(data, context);
+    </code></pre>
+</blockquote>
+  <h3> Output</h3>
+  <div id="rendered-list">
+  </div>
+</section>
+  <script type="text/template" id="sample">
+    <table>
+      <tr>
+        <th>Name</th>
+        <td>{{ test["name"] }}</td>
+      </tr>
+      <tr>
+        <th>Rank</th>
+        <td>{{ test["rank"] }}</td>
+      </tr>
+      <tr>
+        <th>Type</th>
+        <td>
+          {% if (test["type"] == "range") do %}
+          <b>R</b> {% else %}
+          <i>Unknown</i> {% end %}
+        </td>
+      </tr>
+      <tr>
+        <th>Item</th>
+        <td>
+          {% for(var i = 0; i
+          < test[ "items"].length; i++) do %} <label> {{ test["items"][i] }}</label>
+            {% end %}
+        </td>
+      </tr>
+    </table>
+  </script>
+
+  <script type="text/template" id="list-template">
+    <ul>
+      {% ctx.$.each(data, function(item)do %}
+      <li>{{item}}</li>
+      {% end); %}
+      <ul>
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" charset="utf-8"></script>
+  <script src="../nano.js" charset="utf-8"></script>
+  <script src="demo.js" charset="utf-8"></script>
 </body>
 </html>

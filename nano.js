@@ -6,8 +6,8 @@ var nano = (function() {
 
   function NanoTemplate(html) {
     this.template = _compile(html);
-    this.render = function(data) {
-      return this.template.call(data, data || {});
+    this.render = function(data, context) {
+      return this.template.call(data, data || {}, context || {});
     };
 
     return this;
@@ -21,7 +21,7 @@ var nano = (function() {
     code += 'return r.join("");';
     code = 'with(obj || {}){' + code + '}';
 
-    return new Function('obj', code.replace(/[\r\t\n]/g, ''));
+    return new Function('obj', 'ctx', code.replace(/[\r\t\n]/g, ''));
   };
 
 
@@ -66,17 +66,20 @@ var nano = (function() {
   // replace variable expression
   function addVariable(line, js) {
     var code = "";
-
     if (js)
       code = 'r.push(' + line + ');';
     else if (line != '') {
       code = 'r.push("' + line.replace(/"/g, '\\"').replace(/\r\n|\n/g, "") + '");\n';
     }
-
     return code;
   }
 
+  function compileTemplate(html){
+    return new NanoTemplate(html);
+  }
+
   return {
-    Template: NanoTemplate
+    Template: NanoTemplate,
+    compile: compileTemplate
   }
 })();
